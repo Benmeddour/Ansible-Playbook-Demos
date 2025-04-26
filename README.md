@@ -4,7 +4,7 @@ This repository contains a collection of Ansible playbooks, configuration files,
 
 ## Prerequisites
 
-*   **Ansible:** Ensure Ansible is installed on your control node. Refer to the [official Ansible installation guide](https://docs.ansible.com/ansible/latest/installation_guide/index.html).
+*   **Ansible:** Ensure Ansible is installed on your control node. Refer to the [**Ansible installation**](https://github.com/Benmeddour/Ansible-Playbook-Demos/wiki/Ansible).
 *   **Target Hosts:** You need accessible target machines (like VMs or physical servers) configured in the inventory file (`inventory.yaml`) with appropriate SSH access and potentially Python installed.
 
 ## Repository Structure Overview
