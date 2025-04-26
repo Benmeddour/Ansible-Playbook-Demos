@@ -1,0 +1,27 @@
+---
+- name: create a user
+  hosts: ubuntu
+  become: true
+  tasks:
+    - name: Create a ansible user
+      user: # this module manages user accounts
+        name: ansible
+        comment: "Ansible User"
+        groups: root
+    
+    - name: add ssh key for ansible 
+      authorized_key: # this module manages SSH authorized keys
+        user: ansible 
+        key: "{{ lookup('file', '/home/kali/.ssh/id_ed25519.pub') }}"
+    
+    - name: add sudoers file for ansible # this section is used to give sudo privileges to the ansible user
+      copy: 
+        src: sudoers_ansible
+        dest: /etc/sudoers.d/ansible # this file is used to give sudo privileges to the ansible user
+        owner: root
+        group: root
+        mode: 0440
+
+# for more about ansible user module, check the official documentation: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html
+# for more about ansible authorized_key module, check the official documentation: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/authorized_key_module.html
+# for more about ansible copy module, check the official documentation: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html

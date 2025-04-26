@@ -1,0 +1,50 @@
+---
+# This playbook demonstrates how to create a new user in Proxmox VE using the command line interface (CLI).
+- name: Manage Proxmox VE user via CLI
+  hosts: proxmox
+  become: true
+  gather_facts: no
+
+  vars:
+    pve_user_id: "test@pam"         # format user@realm
+    pve_user_password: "password"   # initial password
+    pve_user_comment: "Managed by Ansible"
+    pve_user_email: "user@example.com"
+    pve_user_firstname: "First"
+    pve_user_lastname: "Last"
+    pve_user_enabled: true
+    pve_user_expire: 0               # 0 = no expiration
+    pve_user_groups: ""             # comma-separated list, e.g., "admins,devs"
+
+  tasks:
+    - name: Add or update Proxmox VE user
+      ansible.builtin.command:
+        argv: # Using argv to handle spaces in arguments
+          - pveum
+          - user
+          - add
+          - "{{ pve_user_id }}"
+          #- --password # you only add the password if the user is userid@pve
+          #- "{{ pve_user_password }}"
+          - --comment
+          - "{{ pve_user_comment }}"
+          - --email
+          - "{{ pve_user_email }}"
+          - --firstname
+          - "{{ pve_user_firstname }}"
+          - --lastname
+          - "{{ pve_user_lastname }}"
+          - --enable
+          - "{{ '1' if pve_user_enabled else '0' }}"
+          - --expire
+          - "{{ pve_user_expire }}"
+          - --groups
+          - "{{ pve_user_groups }}"
+      register: pve_user_result
+      changed_when: pve_user_result.rc == 0 and 'created user' in pve_user_result.stdout
+
+    - name: Show Proxmox CLI result
+      ansible.builtin.debug:
+        var: pve_user_result
+
+# for more about argv module, check the official documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks.html#argv

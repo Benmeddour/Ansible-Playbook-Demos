@@ -1,0 +1,7 @@
+# In this file, you can define variables that will be used by Ansible when connecting to the Proxmox hosts.
+# We will use the user and password to connect to the Proxmox hosts using SSH.
+# for more about secure your password, check the official documentation: https://docs.ansible.com/ansible/latest/user_guide/vault.html
+ansible_user: <proxmox_user> # add the user that ssh will use to connect to the proxmox hosts under the group proxmox
+ansible_python_interpreter: /usr/bin/python3
+ansible_connection: ssh
+ansible_password: <proxmox_password> # add the password that ssh will use to connect to the proxmox hosts under the group proxmox

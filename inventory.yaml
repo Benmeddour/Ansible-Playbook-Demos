@@ -1,0 +1,43 @@
+---
+
+ubuntu: # we define the group variables for the ubuntu group in ~/.ansible/test/group_vars/ubuntu.yaml
+  hosts:
+    ubuntu1:
+      ansible_host: <ubuntu1_ip> # we define the host variables for ubuntu1 in ~/.ansible/test/host_vars/ubuntu1.yaml
+    ubuntu2:
+      ansible_host: <ubuntu2_ip> # we define the host variables for ubuntu2 in ~/.ansible/test/host_vars/ubuntu2.yaml
+
+proxmox:  # we define the group variable for the ubuntu group in ~/.ansible/test/group_vars/proxmox.yaml
+  hosts:
+    proxmox1:
+      ansible_host: <proxmox1_ip> # we define the host variables for proxmox1 in ~/.ansible/test/host_vars/proxmox1.yaml
+
+
+# simeple note: 
+# - you need to define the group variables `group_vars` inside the the inventory folder or where the inventory file is located
+# - you need to define the host variables `host_vars` inside the the inventory folder or where the inventory file is located
+
+# - its better to have a inventory folder like this structure:
+# -├── inventory/
+#      ├── production       # Production inventory file
+#      ├── staging          # Staging inventory file
+#      ├── group_vars/
+#      │   ├── all.yml          # Variables for all groups
+#      │   ├── webservers.yml   # Variables for the 'webservers' group
+#      │   └── dbservers.yml    # Variables for the 'dbservers' group
+#      └── host_vars/
+#          ├── server1.example.com.yml # Variables specific to server1
+#          └── server2.example.com.yml # Variables specific to server2
+#
+#
+# for more about ansible inventory, check the official documentation: https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
+# for more about ansible group_vars, check the official documentation: https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#group-variables
+# for more about ansible host_vars, check the official documentation: https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#host-variables
+
+    
+
+
+
+    
+
+    

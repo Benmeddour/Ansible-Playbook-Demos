@@ -1,0 +1,20 @@
+- hosts: ubuntu 
+  become: true
+  roles: # this is the list of roles to be executed
+    - base
+
+- hosts: ubuntu
+  become: true
+  roles:
+    - admin_ubt
+
+- hosts: proxmox
+  roles:
+    - root_proxmox
+
+- hosts: ubuntu1
+  become: true
+  roles:
+    - test_hendlers
+
+# for more about roles, check the official documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html

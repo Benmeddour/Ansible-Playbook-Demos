@@ -1,0 +1,107 @@
+---
+# This playbook is used to manage the file and service using ansible
+- name: Managing file and service
+  hosts: ubuntu1
+  become: true
+  tasks:
+    - name: install apache2
+      apt:
+        name: apache2
+        state: present
+
+    - name: copy test_site html file for site 
+      copy: # copy the file from local to remote using ansible
+        src: test_site.html 
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: start apache2
+      service: # service module is used to manage services
+        name: apache2
+        state: started
+        enabled: true
+    
+    # this taged task `change_title` and `always` will play around with changing a line in the file and restarting the service
+    # and checking the status of the service
+    - name: change the title of the html file
+      tags: change_title # this tag is used to run the playbook with specific tags
+      lineinfile: # lineinfile module is used to change the title of the html file  
+        path: /var/www/html/index.html
+        regexp: '<title>.*</title>'
+        line: '<title>Automate Site Deployement with ansible</title>'
+      register: result # register the output of the command to a variable
+
+    - name: restart apache2
+      tags: change_title
+      service:
+        name: apache2
+        state: restarted
+      when: result.changed # this will check if the file is changed before restarting the service
+
+    - name: check apache2 status
+      tags: always # this tag is used to always run the playbook 
+      command: systemctl status apache2 # we use command module because under the service module thre is no option to check the status of the service
+      register: apache2_status # register the output of the command to a variable
+
+    - name: debug apache2 status
+      tags: always
+      debug: # this debug module is used to print the output of the command
+        var: apache2_status.stdout_lines
+      when: apache2_status is defined # this will check if the variable is defined before printing it
+
+- name: install terraform using unarchive from dirrect link
+  hosts: ubuntu2
+  become: true
+  tasks:
+    - name: install unzip
+      apt:
+        name: unzip
+        state: present
+
+    - name: install terraform
+      unarchive: # unarchive module is used to extract the zip file
+        src: https://releases.hashicorp.com/terraform/1.5.0/terraform_1.5.0_linux_amd64.zip
+        dest: /usr/local/bin/
+        remote_src: yes
+        mode: 0755
+        owner: root
+        group: root
+
+    - name: check terraform version
+      command: terraform --version
+      register: terraform_version # register the output of the command to a variable
+
+    - name: debug terraform version option 1
+      debug: 
+        msg: "Terraform version is {{ terraform_version.stdout_lines }}"
+      when: terraform_version is defined # this will check if the variable is defined before printing it
+
+    -
+    - name: debug terraform version option 2
+      debug:
+        var: terraform_version.stdout_lines # this will print the output of the command
+      when: terraform_version is defined
+
+- name: remove terraform using ansible.builtin.file module
+  hosts: ubuntu2
+  tags: remove_terraform # this tag is used to run the playbook with specific tags
+  # you can run the playbook with specific tags using the command ansible-playbook test/managing_file.yaml --tags remove_terraform
+  become: true
+  tasks:
+    - name: remove terraform folder
+      ansible.builtin.file: # file module is used to remove the file
+        path: /usr/local/bin/terraform
+        state: absent
+        force: yes # this will remove the file
+    
+    - name: uninstall unzip
+      apt:
+        name: unzip
+        state: absent
+
+
+# for more about ansible file module, check the official documentation: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
+# for more about ansible service module, check the official documentation: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/service_module.html
+# for more about ansible unarchive module, check the official documentation: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html

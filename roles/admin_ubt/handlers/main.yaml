@@ -1,0 +1,40 @@
+# This handler is being used to notify the tasks that need to be executed after the qemu-guest-agent is installed.
+# The name of these handlers is defined in the `qemu_guest_agent_install_handler` variable in the `admin_ubt/vars/main.yaml` file.
+# The handlers are executed in the order they are defined in the variable.
+# The handlers are used to perform the following tasks:
+# 1. Reboot the system if qemu-guest-agent was installed.
+# 2. Wait for the system to be back online.
+# 3. Enable the qemu-guest-agent service.
+# 4. Check if the qemu-guest-agent service is running.
+# 5. Check if the qemu-guest-agent service is enabled.
+ 
+
+- name: reboot the system if qemu-guest-agent was installed
+  ansible.builtin.reboot: # this module is used to reboot the system
+    msg: "Rebooting the system to apply changes"
+    connect_timeout: 5
+    reboot_timeout: 600
+    test_command: whoami # this command is used to check if the system is back online
+  
+- name: wait for the system to be back online
+  ansible.builtin.wait_for_connection:
+    delay: 10
+    timeout: 300
+
+- name: enable qemu-guest-agent service
+  ansible.builtin.systemd:
+    name: qemu-guest-agent
+    enabled: true
+    state: started
+
+- name: check if qemu-guest-agent is running 
+  ansible.builtin.command: systemctl is-active qemu-guest-agent
+  register: qemu_guest_agent_status
+  changed_when: false # this line is used to prevent the task from being marked as changed
+  failed_when: qemu_guest_agent_status.stdout != "active" # this task will fail if the qemu-guest-agent service is not running
+
+- name: check if qemu-guest-agent is enabled
+  ansible.builtin.command: systemctl is-enabled qemu-guest-agent
+  register: qemu_guest_agent_enabled
+  changed_when: false 
+  failed_when: qemu_guest_agent_enabled.stdout != "enabled" # this task will fail if the qemu-guest-agent service is not enabled

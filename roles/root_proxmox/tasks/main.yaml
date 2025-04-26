@@ -1,0 +1,12 @@
+- name: get the proxmox version
+  ansible.builtin.command: pveversion
+  register: proxmox_version
+  changed_when: false
+  failed_when: false
+
+- name: print the proxmox version
+  ansible.builtin.debug:
+    msg: "Proxmox version: {{ proxmox_version.stdout }}"
+  when: proxmox_version is defined and proxmox_version.stdout is not none
+
+

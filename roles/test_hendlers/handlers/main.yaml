@@ -1,0 +1,14 @@
+# This handler is executed when the appache2 package is installed. 
+# It is used to start and enable the apache2 service.
+#
+# required: the name of the handler should be the same as the name in the notify section of the task that triggers it. This way, it will be easier to understand the relationship between the task and the handler.
+# best_practice: the name of the handler should be unique and descriptive enough to understand what it does, and it should be in lowercase letters with underscores separating words.
+
+- name: start_and_enable_apache 
+  ansible.builtin.service:
+    name: "{{ web_server_name }}"
+    state: started
+    enabled: yes
+  when: ansible_os_family == "Debian"
+
+# for more about handlers, check the official documentation: https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_handlers.html

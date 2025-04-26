@@ -1,0 +1,50 @@
+# This playbook is used to update all packages on all servers
+# and reboot if a kernel update is required.
+# It is designed to be run on all servers in the inventory.
+# It uses the apt module to update the package cache and install sshpass.
+# It also checks if a reboot is required by looking for the
+# /var/run/reboot-required file, which is created by the kernel
+# when a kernel update is installed.
+# The playbook is idempotent, meaning it can be run multiple times
+# without causing any issues.
+# It is also designed to be run as a non-root user with sudo privileges.
+# The playbook uses the become directive to run tasks as root.
+
+---
+- hosts: all
+  become: true
+  tasks:
+
+    - name: Update apt repo and cache on all Debian/Ubuntu hosts
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+        cache_valid_time: 3600
+
+    - name: Update all packages on all servers
+      apt:
+        upgrade: dist
+        force_apt_get: yes
+        
+    # - name: upadate Update apt repo and cache on all Debian/Ubuntu hosts and Update all packages on all servers in one go
+    #  apt:
+    #    update_cache: yes
+    #    force_apt_get: yes
+    #    cache_valid_time: 3600
+    #    upgrade: dist
+
+    - name: Check if a reboot is needed on all servers
+      register: reboot_required_file
+      stat: path=/var/run/reboot-required
+
+    - name: Reboot the server if kernel update
+      reboot:
+        msg: "Reboot initiated by Ansible for kernel updates"
+        connect_timeout: 5
+        reboot_timeout: 300
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: uptime
+      when: reboot_required_file.stat.exists
+
+# for more about ansible palybooks, check the official documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks.html

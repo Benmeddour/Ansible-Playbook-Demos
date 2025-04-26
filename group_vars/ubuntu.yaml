@@ -1,0 +1,12 @@
+ansible_user: <ubuntu_user> # add the user that ssh will use to connect to the ubuntu hosts under the group ubuntu
+ansible_ssh_private_key_file: <path_to_your_private_key> # add the path to your private key that ssh will use to connect to the ubuntu hosts under the group ubuntu for example: /home/kali/.ssh/id_ed25519
+ansible_python_interpreter: /usr/bin/python3
+ansible_connection: ssh
+ansible_sshpass_prompt: Enter passphrase for key '<path_to_your_private_key>' # add this line if you are using a passphrase for your private key
+ansible_ssh_pass: <your_passphrase_for_private_key> # add this line if you are using a passphrase for your private key
+ansible_become: true
+ansible_become_method: sudo
+ansible_become_pass: <your_sudo_password> # add the password that sudo will use to connect to the ubuntu hosts under the group ubuntu
+
+# to sucure passphrase and password that used in ansible_become_pass and ansible_ssh_pass, you can use ansible vault to encrypt the password and passphrase
+# for more about secure your password, check the official documentation: https://docs.ansible.com/ansible/latest/user_guide/vault.html

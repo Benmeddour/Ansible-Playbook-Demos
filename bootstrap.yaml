@@ -1,0 +1,27 @@
+---
+#this bootstrap playbook is used to insiatialize configuration to a freshly installed system
+#this playbook is used to create a user and add ssh key for ansible
+#this playbook is used to add sudoers file for ansible
+- name: bootstrap
+  hosts: all
+  become: true
+  vars:
+    item: # adding the packages to be installed that you need to be installed for the freshly installed system
+      - git
+      - apache2 
+  pre_tasks:
+    - name: install update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      changed_when: false # this is used to update the apt cache
+      when: ansible_distribution == "Ubuntu" # this is used to check if the system is ubuntu
+    
+    - name: install all necessary packages
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+
+# for more about pre_tasks, check the official documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks.html#pre-tasks

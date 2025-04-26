@@ -1,0 +1,11 @@
+---
+- name: Shutdown all servers
+  hosts: all
+  become: true  # Run tasks with root privileges
+  tasks:
+    - name: Initiate shutdown using command module
+      ansible.builtin.command: shutdown -h now # Use the system's shutdown command
+      # Removed args section as 'warn' is not supported in older versions
+
+
+# for more about ansible command module, check the official documentation: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html

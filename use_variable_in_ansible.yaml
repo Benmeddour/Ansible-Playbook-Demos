@@ -1,0 +1,22 @@
+---
+- name: Install multiple packages using a variable
+  hosts: all
+  become: yes
+  vars:
+    packages_to_install:
+      - git
+      - apache2
+      - nginx
+      - nodejs
+
+  # `pre_tasks` is a valid section in an Ansible play. Any tasks listed under `pre_tasks:` will be executed before any roles are applied and before the main `tasks:` section of the play. It's useful for setup actions that need to happen early, like ensuring certain prerequisites are met.
+  tasks:
+    - name: Install specified packages
+      ansible.builtin.apt:
+        name: "{{ packages_to_install }}"
+        state: absent
+        update_cache: yes
+      when: "'ubuntu' in group_names" # for targetting specific group
+      # when: inventory_hostname == 'ubuntu1' # for targetting specific host
+      
+# for more about variables in ansible, check the official documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_grammar.html#variables

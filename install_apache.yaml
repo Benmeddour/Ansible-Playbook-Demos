@@ -1,0 +1,38 @@
+---
+- name: inatall apache in ubuntu1 and nginx in ubuntu2
+  hosts: all # you can use `ubuntu` for specific group or ubuntu1 for specific host
+  become: true
+  tasks:
+    - name: Uninstall Apache on ubuntu1
+      apt:
+        name: apache2
+        state: present # absent to remove the package
+      when: inventory_hostname == 'ubuntu1'
+    - name: Install Nginx on ubuntu2
+      apt:
+        name: nginx 
+        # - nginx 
+        # - sshpass
+        # - nginx-core, bye following this you can install different packages in one go
+        state: present # present to install the package
+      when: inventory_hostname == 'ubuntu2'
+    - name: Start Apache on ubuntu1
+      service:
+        name: apache2
+        state: started
+      when: inventory_hostname == 'ubuntu1'
+    - name: Start Nginx on ubuntu2
+      service:
+        name: 
+        state: started
+      when: inventory_hostname == 'ubuntu2'
+
+# Target a combination of groups and hosts (e.g., the ubuntu group and the host proxmox1)
+# for targetting multiple specific groups it works for multiple hosts
+# hosts: ubuntu,proxmox or 
+# hosts:
+#  - ubuntu
+#  - proxmox
+
+# for more about apt module, check the official documentation: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
+# for more about conditionals in ansible, check the official documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html

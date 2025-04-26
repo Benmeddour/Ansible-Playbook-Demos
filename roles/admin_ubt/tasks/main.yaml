@@ -1,0 +1,14 @@
+# This file is part of the Ansible role for installing and configuring qemu-guest-agent on Ubuntu.
+# It is designed to be used with Ansible playbooks to automate the installation and configuration process.
+# The role is intended to be used on Ubuntu systems and requires Ansible to be installed on the control node.
+
+- name: install qemu-guest-agent
+  ansible.builtin.apt:
+    name: qemu-guest-agent
+    state: present
+  when: ansible_distribution == "Ubuntu"
+  notify: "{{qemu_guest_agent_install_handler}}" # this line is used to notify the handlers that need to be executed, the name of the handlers are defined in the `qemu_guest_agent_install_handler` variable in the `admin_ubt/vars/main.yaml` file. The handlers are executed in the order they are defined in the variable.
+  # the handlers that will be executed are located in the `admin_ubt/handlers/main.yaml` file.
+
+
+ 

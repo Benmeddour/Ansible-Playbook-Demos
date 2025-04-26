@@ -1,0 +1,19 @@
+---
+- name: inatall apache in ubuntu1 and nginx in ubuntu2
+  hosts: ubuntu 
+  become: true
+  tasks:
+    - name: install Apache on ubuntu1 and nginx on ubuntu2
+      apt:
+        name: "{{ web_server_name}}" # it gather the variable from the ~/.ansible/test/host_vars for each host
+        state: present
+
+    - name: Start Apache on ubuntu1 and nginx on ubuntu2
+      service:
+        name: "{{ web_server_name }}"
+        state: started
+
+# for more about host_group_vars, check the official documentation: https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#host-and-group-variables
+
+
+

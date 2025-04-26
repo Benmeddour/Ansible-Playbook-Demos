@@ -1,0 +1,9 @@
+---
+# tasks file for test_handlers
+# This file is used to insall apache2 on the system using handlers operations for best practices to have a clean and organized code.
+- name: install apache
+  ansible.builtin.apt:
+    name: "{{ web_server_name }}"
+    state: present
+  notify: start_and_enable_apache # this will trigger the handler to start and enable apache when appache is installed, if appache is already installed, the handler will not be triggered
+  # you should define the handler under the roles/the_role_name/handlers/main.yaml file

@@ -1,0 +1,6 @@
+qemu_guest_agent_install_handler:
+  - reboot the system if qemu-guest-agent was installed
+  - wait for the system to be back online
+  - enable qemu-guest-agent service
+  - check if qemu-guest-agent is running
+  - check if qemu-guest-agent is enabled
