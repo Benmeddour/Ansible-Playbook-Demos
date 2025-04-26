@@ -11,5 +11,3 @@ This directory contains various Ansible playbooks for testing and demonstration 
 *   **`playbook-update.yaml`**: Updates the package cache and upgrades all packages (`dist-upgrade`) on Debian/Ubuntu-based systems. It also checks if a reboot is required due to kernel updates and performs one if necessary.
 *   **`shutdown_all_servers.yaml`**: (Contents not provided) Presumably, this playbook is designed to shut down servers listed in the inventory.
 *   **`use_variable_in_ansible.yaml`**: Demonstrates how to install a list of packages defined in a variable (`packages_to_install`) using the `ansible.builtin.apt` module.
-
-obenmeddourokba@gmail.com
