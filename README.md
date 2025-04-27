@@ -1,10 +1,10 @@
 # Ansible Playbook Demonstrations (Test Project)
 
-This repository contains a collection of Ansible playbooks, configuration files, and roles designed for testing, learning, and demonstrating various infrastructure automation tasks.
+This repository contains a collection of Ansible playbooks, configuration files, and roles designed for testing, learning, and demonstrating various infrastructure automation tasks. For more information about Ansible concepts, see the [Wiki page](https://github.com/Benmeddour/Ansible-Playbook-Demos/wiki).
 
 ## Prerequisites
 
-*   **Ansible:** Ensure Ansible is installed on your control node. Refer to the [**Ansible installation**](https://github.com/Benmeddour/Ansible-Playbook-Demos/wiki/Ansible).
+*   **Ansible:** Ensure Ansible is installed on your control node. Refer to the [**Ansible Installation Guide**](https://github.com/Benmeddour/Ansible-Playbook-Demos/wiki/Ansible:-Key-Features-&-Installation).
 *   **Target Hosts:** You need accessible target machines (like VMs or physical servers) configured in the inventory file (`inventory.yaml`) with appropriate SSH access and potentially Python installed.
 
 ## Repository Structure Overview
